@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
         contacts.add("Sandrinha Pereira | 914689261");
         contacts.add("Sofia Pereira | 9145862846");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, contacts);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contacts);
 
         ListView listView = (ListView) findViewById(R.id.ListView_contacts);
         listView.setAdapter(adapter);
@@ -42,6 +42,19 @@ public class MainActivity extends AppCompatActivity {
         // Specify the layout to use when the list of choices appears
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter2);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "clicou no item " + position, Toast.LENGTH_SHORT).show();
+
+                contacts.remove(position);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1, contacts);
+                ListView listView = (ListView) findViewById(R.id.ListView_contacts);
+                listView.setAdapter(adapter);
+            }
+        });
     }
 
     public void onClick_search(View view) {
@@ -140,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClick_remover(View view){
         ListView lv = (ListView) findViewById(R.id.ListView_contacts);
-        lv.removeAllViews();
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1, contacts);
+        lv.setAdapter(adapter);
+        adapter.clear();
     }
 }
